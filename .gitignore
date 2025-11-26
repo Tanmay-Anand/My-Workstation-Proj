@@ -1,0 +1,19 @@
+# Backend
+/backend/target
+/backend/.idea
+/backend/*.iml
+/backend/.settings
+/backend/logs
+
+# Frontend
+/frontend/node_modules
+/frontend/dist
+
+# OS/Editor files
+.DS_Store
+.vscode
+
+# Environment
+**/*.env
+application-dev.properties
+application-dev.yml
