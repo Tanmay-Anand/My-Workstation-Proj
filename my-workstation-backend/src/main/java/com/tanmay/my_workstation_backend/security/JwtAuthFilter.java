@@ -1,0 +1,66 @@
+package com.tanmay.my_workstation_backend.security;
+
+
+
+import com.tanmay.my_workstation_backend.security.JwtUtils;
+import com.tanmay.my_workstation_backend.security.CustomUserDetailsService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+
+import java.io.IOException;
+
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
+//OncePerRequestFilter ensures the filter runs exactly once per request, not multiple times
+
+    private final JwtUtils jwtUtils;
+    private final CustomUserDetailsService userDetailsService;
+
+    public JwtAuthFilter(JwtUtils jwtUtils, CustomUserDetailsService uds) {
+        this.jwtUtils = jwtUtils;
+        this.userDetailsService = uds;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req,
+                                    HttpServletResponse res,
+                                    FilterChain chain) throws ServletException, IOException {
+        String header = req.getHeader("Authorization");
+//        Browsers send tokens in this format:
+//        Authorization: Bearer <jwt_token_here>
+
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+//            Because "Bearer " is exactly 7 characters
+
+            try {
+                if (jwtUtils.validateToken(token)) {
+                    Claims claims = jwtUtils.getClaims(token);
+                    String username = claims.getSubject();
+
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            } catch (JwtException ex) {
+                // token invalid — let it pass to exception handler or continue unauthenticated
+            }
+        }
+        chain.doFilter(req, res);
+    }
+}

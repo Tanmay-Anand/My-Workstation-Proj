@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users") // user is a reserved word in some DBs; use plural
+@Table(name = "users") // user is a reserved word in some DBs so, I used plural
 public class User {
 
     @Id
