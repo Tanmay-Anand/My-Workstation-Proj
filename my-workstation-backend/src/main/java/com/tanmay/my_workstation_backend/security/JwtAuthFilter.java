@@ -38,13 +38,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws ServletException, IOException {
+
+        // Skip JWT filter for auth endpoints
+        String path = req.getRequestURI();
+        if (path.startsWith("/api/auth/") || path.equals("/ping")) {
+            chain.doFilter(req, res);
+            return;
+        }
+
         String header = req.getHeader("Authorization");
-//        Browsers send tokens in this format:
-//        Authorization: Bearer <jwt_token_here>
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-//            Because "Bearer " is exactly 7 characters
 
             try {
                 if (jwtUtils.validateToken(token)) {
@@ -58,7 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (JwtException ex) {
-                // token invalid — let it pass to exception handler or continue unauthenticated
+                // token invalid — continue unauthenticated
             }
         }
         chain.doFilter(req, res);

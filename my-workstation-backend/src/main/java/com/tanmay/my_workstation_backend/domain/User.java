@@ -13,7 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users") // user is a reserved word in some DBs so, I used plural
+@Table(name = "users", indexes = {
+        @Index(name = "idx_user_username", columnList = "username"),
+        @Index(name = "idx_user_email", columnList = "email")
+})
+// user is a reserved word in some DBs so, I used plural
 public class User {
 
     @Id
