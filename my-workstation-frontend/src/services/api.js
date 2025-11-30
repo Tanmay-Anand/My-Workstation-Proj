@@ -1,31 +1,35 @@
+// src/api/api.js
 import axios from 'axios';
-import { store } from '../store'; // import store to read token
-import { clearCredentials } from '../store/slices/authSlice';
+import { getToken } from './authToken';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
-  timeout: 8000,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  timeout: 10000,
 });
 
-api.interceptors.request.use(config => {
-  const state = store.getState();
-  const token = state.auth.token;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-api.interceptors.response.use(
-  res => res,
-  err => {
-    if (err.response && err.response.status === 401) {
-      // token expired or invalid — clear auth and redirect to login
-      store.dispatch(clearCredentials());
-      // you might import navigate from react-router or set a window.location:
-      window.location.href = '/login';
+// Request interceptor - adds token to every request
+api.interceptors.request.use(
+  config => {
+    const token = getToken();
+    console.log('Token in request:', token ? 'Present' : 'Missing'); // Debug log
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return Promise.reject(err);
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor - handle errors
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 403) {
+      console.error('403 Forbidden - Token might be invalid or missing');
+    }
+    return Promise.reject(error);
   }
 );
 

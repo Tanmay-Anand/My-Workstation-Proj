@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../services/api';
+import api from '../api/api'; // FIXED: Should be ../api/api not ../services/api
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';

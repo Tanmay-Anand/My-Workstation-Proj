@@ -1,40 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
+import api from '../api/api'; // FIXED: Correct path
 import { StickyNote, Bookmark, CheckSquare, TrendingUp } from 'lucide-react';
 
 export default function Home() {
   const user = useSelector(s => s.auth.user);
+  const token = useSelector(s => s.auth.token); // Get token to check auth status
   const [stats, setStats] = useState({ notes: 0, bookmarks: 0, tasks: 0 });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        // Fetch counts from each endpoint
-        const [notesRes, bookmarksRes, tasksRes] = await Promise.all([
-          api.get('/notes?page=0&size=1'),
-          api.get('/bookmarks?page=0&size=1'),
-          api.get('/tasks?page=0&size=1')
-        ]);
+  const fetchStats = useCallback(async () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-        setStats({
-          notes: notesRes.data.totalElements || 0,
-          bookmarks: bookmarksRes.data.totalElements || 0,
-          tasks: tasksRes.data.totalElements || 0
-        });
-      } catch (err) {
-        console.error('Failed to fetch stats:', err);
-      } finally {
-        setLoading(false);
+    try {
+      setLoading(true);
+      
+      // Fetch counts from each endpoint
+      const [notesRes, bookmarksRes, tasksRes] = await Promise.all([
+        api.get('/notes?page=0&size=1'),
+        api.get('/bookmarks?page=0&size=1'),
+        api.get('/tasks?page=0&size=1')
+      ]);
+
+      setStats({
+        notes: notesRes.data.totalElements || 0,
+        bookmarks: bookmarksRes.data.totalElements || 0,
+        tasks: tasksRes.data.totalElements || 0
+      });
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [token]); // Only depends on token
+
+  // Fetch stats on mount and whenever user/token changes
+  useEffect(() => {
+    if (user && token) {
+      fetchStats();
+    }
+  }, [user, token, fetchStats]);
+
+  // Refetch stats when window regains focus (user returns to Home)
+  useEffect(() => {
+    const handleFocus = () => {
+      if (user && token) {
+        fetchStats();
       }
     };
 
-    if (user) {
-      fetchStats();
-    }
-  }, [user]);
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [user, token, fetchStats]);
 
   return (
     <div className="max-w-6xl mx-auto">
