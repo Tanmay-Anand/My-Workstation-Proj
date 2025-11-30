@@ -26,32 +26,49 @@ export default function Login() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h2 className="text-2xl mb-4">Login</h2>
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
+      <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
 
-      {err && <div className="text-red-600 mb-2">{err}</div>}
+      {err && (
+        <div className="text-red-600 mb-4 text-center">
+          {err}
+        </div>
+      )}
 
-      <form onSubmit={submit}>
+      <form onSubmit={submit} className="space-y-4">
         <input
           value={username}
           onChange={e => setUsername(e.target.value)}
-          placeholder="username"
-          className="mb-2 w-full p-2 border rounded"
+          placeholder="Username"
+          className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <input
           value={password}
           onChange={e => setPassword(e.target.value)}
-          placeholder="password"
+          placeholder="Password"
           type="password"
-          className="mb-2 w-full p-2 border rounded"
+          className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <button className="btn w-full mt-2">Login</button>
+
+        <button
+          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white font-medium
+                     hover:bg-blue-700 active:bg-blue-800 transition-colors"
+        >
+          Login
+        </button>
       </form>
 
-      <p className="mt-4 text-center">
-        New user? <Link className="text-blue-500" to="/signup">Create an account</Link>
+      <p className="mt-6 text-center text-sm">
+        New user?{' '}
+        <Link className="text-blue-600 hover:underline" to="/signup">
+          Create an account
+        </Link>
       </p>
     </div>
-  );
+  </div>
+);
+
 }
 

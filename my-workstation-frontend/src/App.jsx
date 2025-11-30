@@ -37,7 +37,39 @@ export default function App() {
       {showNavbar && (
         <nav className="bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3">
-            <div className="flex justify-between items-center">
+            {/* Mobile Layout */}
+            <div className="md:hidden">
+              {/* Top Row: Logo and Logout */}
+              <div className="flex justify-between items-center mb-3">
+                <Link className="font-semibold text-lg text-blue-600" to="/home">
+                  My Workstation
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-1 px-2 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded transition"
+                >
+                  <LogOut size={14} /> Logout
+                </button>
+              </div>
+              {/* Bottom Row: Navigation Links and Username */}
+              <div className="flex gap-4 items-center overflow-x-auto pb-1">
+                <Link className="text-sm whitespace-nowrap hover:text-blue-600 transition" to="/notes">
+                  Notes
+                </Link>
+                <Link className="text-sm whitespace-nowrap hover:text-blue-600 transition" to="/bookmarks">
+                  Bookmarks
+                </Link>
+                <Link className="text-sm whitespace-nowrap hover:text-blue-600 transition" to="/tasks">
+                  Tasks
+                </Link>
+                <span className="text-xs text-gray-600 whitespace-nowrap ml-auto">
+                  Hello, <span className="font-medium">{user.username}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden md:flex justify-between items-center">
               <div className="flex gap-6">
                 <Link className="font-semibold text-lg text-blue-600" to="/home">
                   My Workstation
