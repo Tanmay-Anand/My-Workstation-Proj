@@ -1,5 +1,4 @@
-// src/api/authToken.js
-let token = null;
+let token = null; 
 
 export function setToken(t) {
   token = t;

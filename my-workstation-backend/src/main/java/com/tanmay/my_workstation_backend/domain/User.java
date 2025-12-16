@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
         @Index(name = "idx_user_username", columnList = "username"),
         @Index(name = "idx_user_email", columnList = "email")
 })
-// user is a reserved word in some DBs so, I used plural
 public class User {
 
     @Id
@@ -27,12 +26,12 @@ public class User {
     @NotBlank
     @Size(min = 3, max = 50)
     @Column(nullable = false, unique = true)
-    private String username;
+    private String username; //actual field.
 
     @NotBlank
     @Size(min = 6)
     @Column(nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // don't serialize password outwards
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Email

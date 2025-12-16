@@ -16,9 +16,9 @@ public class TaskRequest {
     private String text;
 
     private Task.Status status;
+
     private Task.Priority priority;
 
-    // must be today or future
     @FutureOrPresent(message = "Due date cannot be in the past")
     private LocalDate dueDate;
 }

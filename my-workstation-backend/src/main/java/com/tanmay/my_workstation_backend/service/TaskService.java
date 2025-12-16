@@ -39,7 +39,7 @@ public class TaskService {
                                         Pageable pageable) {
         Long userId = userService.getCurrentUserId();
 
-        // prioritize explicit filters
+
         if (status != null) {
             return taskRepository.findByUserIdAndStatus(userId, status, pageable)
                     .map(TaskMapper::toResponse);
@@ -49,13 +49,14 @@ public class TaskService {
                     .map(TaskMapper::toResponse);
         }
         if (dueBefore != null && dueAfter != null) {
-            // naive approach: filter in DB by range - add repository method if you want DB-level range
-            // fallback: fetch user's tasks page and filter in memory (but for Phase 3 we assume small pages)
+
         }
         if (q != null && !q.isBlank()) {
             return taskRepository.searchByText(userId, q, pageable).map(TaskMapper::toResponse);
         }
-        return taskRepository.findByUserId(userId, pageable).map(TaskMapper::toResponse);
+        return taskRepository
+                .findByUserId(userId, pageable)
+                .map(TaskMapper::toResponse);
     }
 
     @Transactional(readOnly = true)

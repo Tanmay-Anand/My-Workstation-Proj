@@ -27,7 +27,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     // Filter by tags
     @Query("""
-        SELECT DISTINCT n FROM Note n
+        SELECT DISTINCT n FROM Note n 
         JOIN n.tags t
         WHERE n.user.id = :userId
         AND t IN :tags
@@ -40,6 +40,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     // Filter by pinned or archived
     Page<Note> findByUserIdAndPinned(Long userId, boolean pinned, Pageable pageable);
+    //SELECT * FROM note WHERE user_id = ? AND pinned = ? LIMIT ...
 
     Page<Note> findByUserIdAndArchived(Long userId, boolean archived, Pageable pageable);
 }

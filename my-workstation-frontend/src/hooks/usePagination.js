@@ -1,12 +1,11 @@
-// src/components/pagination/Pagination.jsx
 import React from 'react';
 
 export default function Pagination({ page, onChange }) {
-  if (!page) return null;
+  if (!page) return null; 
   const { number, totalPages } = page;
-  const current = number;
-  const pages = Math.min(totalPages, 7);
-  const start = Math.max(0, current - 3);
+  const current = number; 
+  const pages = Math.min(totalPages, 7); 
+  const start = Math.max(0, current - 3); 
   const displayed = Array.from({ length: Math.min(pages, totalPages) }, (_, i) => start + i).filter(n => n >= 0 && n < totalPages);
 
   return (
@@ -14,6 +13,7 @@ export default function Pagination({ page, onChange }) {
       <button disabled={current === 0} onClick={() => onChange(0)} className="px-2 py-1 rounded bg-gray-200 disabled:opacity-50">First</button>
       <button disabled={current === 0} onClick={() => onChange(current - 1)} className="px-2 py-1 rounded bg-gray-200 disabled:opacity-50">Prev</button>
 
+    {/* Page number buttons */}
       {displayed.map(p => (
         <button key={p}
                 onClick={() => onChange(p)}
@@ -22,6 +22,7 @@ export default function Pagination({ page, onChange }) {
         </button>
       ))}
 
+{/* Next and Last options */}
       <button disabled={current === totalPages - 1} onClick={() => onChange(current + 1)} className="px-2 py-1 rounded bg-gray-200 disabled:opacity-50">Next</button>
       <button disabled={current === totalPages - 1} onClick={() => onChange(totalPages - 1)} className="px-2 py-1 rounded bg-gray-200 disabled:opacity-50">Last</button>
     </div>

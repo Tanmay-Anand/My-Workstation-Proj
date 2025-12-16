@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import api from '../api/api'; // FIXED: Correct path
+import api from '../api/api';
 import { StickyNote, Bookmark, CheckSquare, TrendingUp } from 'lucide-react';
 
 export default function Home() {
+  //Accessing global auth state
   const user = useSelector(s => s.auth.user);
-  const token = useSelector(s => s.auth.token); // Get token to check auth status
+  const token = useSelector(s => s.auth.token); 
+  //Local state for statistics
   const [stats, setStats] = useState({ notes: 0, bookmarks: 0, tasks: 0 });
   const [loading, setLoading] = useState(true);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async () => { 
     if (!token) {
       setLoading(false);
       return;
@@ -19,7 +21,6 @@ export default function Home() {
     try {
       setLoading(true);
       
-      // Fetch counts from each endpoint
       const [notesRes, bookmarksRes, tasksRes] = await Promise.all([
         api.get('/notes?page=0&size=1'),
         api.get('/bookmarks?page=0&size=1'),
@@ -36,16 +37,14 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [token]); // Only depends on token
+  }, [token]);
 
-  // Fetch stats on mount and whenever user/token changes
   useEffect(() => {
     if (user && token) {
       fetchStats();
     }
   }, [user, token, fetchStats]);
 
-  // Refetch stats when window regains focus (user returns to Home)
   useEffect(() => {
     const handleFocus = () => {
       if (user && token) {
@@ -68,9 +67,11 @@ export default function Home() {
         </p>
       </div>
 
+      {/* API calls not done yet then → show a loading message. */}
       {loading ? (
         <div className="text-center py-12">Loading your workspace...</div>
       ) : (
+        // Loaded → Show dashboard cards: Notes, Bookmarks, Tasks card.
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Notes Card */}
           <Link to="/notes" className="block">
@@ -128,6 +129,7 @@ export default function Home() {
           <TrendingUp size={24} className="text-blue-600" />
           <h2 className="text-xl font-semibold">Quick Actions</h2>
         </div>
+        {/* Not a new page -> link to the same pages: /notes, /bookmarks, /tasks */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/notes" className="bg-white px-4 py-3 rounded-lg hover:shadow-md transition text-center">
             <span className="font-medium text-blue-600">+ New Note</span>
@@ -141,7 +143,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Overview */}
+      {/* Features Overview:  */}
       <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">What You Can Do</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

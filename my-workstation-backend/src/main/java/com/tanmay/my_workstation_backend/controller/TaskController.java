@@ -41,27 +41,32 @@ public class TaskController {
             @PageableDefault(size = 20) Pageable pageable) {
 
         Page<TaskResponse> page = taskService.listTasks(q, status, priority, dueBefore, dueAfter, pageable);
+        //returns the page.
         return ResponseEntity.ok(page);
     }
 
+    //GET a single task
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> get(@PathVariable Long id) {
         TaskResponse resp = taskService.getTask(id);
         return ResponseEntity.ok(resp);
     }
 
+    //UPDATE a task
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> update(@PathVariable Long id, @Valid @RequestBody TaskRequest req) {
         TaskResponse resp = taskService.updateTask(id, req);
         return ResponseEntity.ok(resp);
     }
 
+    //DELETE a task
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
 
+    //MARK task as complete
     @PostMapping("/{id}/complete")
     public ResponseEntity<TaskResponse> complete(@PathVariable Long id) {
         TaskResponse resp = taskService.markCompleted(id);

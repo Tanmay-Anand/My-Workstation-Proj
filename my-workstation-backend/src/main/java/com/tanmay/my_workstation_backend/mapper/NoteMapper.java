@@ -39,6 +39,7 @@ public class NoteMapper {
         r.setTags(n.getTags());
         r.setCreatedAt(n.getCreatedAt());
         r.setUpdatedAt(n.getUpdatedAt());
+
         return r;
     }
 }

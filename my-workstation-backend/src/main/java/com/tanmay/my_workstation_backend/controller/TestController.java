@@ -11,13 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-
     private final NoteRepository noteRepo;
 
     public TestController(NoteRepository noteRepo) {
         this.noteRepo = noteRepo;
     }
-
     @GetMapping("/ping")
     public String ping() {
         return "pong";

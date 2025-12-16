@@ -1,14 +1,8 @@
-// src/store/slices/authSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { jwtDecode } from 'jwt-decode';
-import { setToken as setApiToken } from '../../api/authToken';
 
-/*
-  AUTH RULES:
-  - localStorage is the source of truth between reloads
-  - authToken.js holds an in-memory token for axios
-  - Redux holds UI state
-*/
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'; 
+import { jwtDecode } from 'jwt-decode'; 
+import { setToken as setApiToken } from '../../api/authToken'; 
 
 /*******************************
  * Helpers
@@ -28,8 +22,9 @@ function decodeJwt(token) {
 }
 
 /*******************************
- * Initial State
+ * Initial Redux State
  *******************************/
+//Before login:
 const initialState = {
   token: null,
   user: null,
@@ -49,12 +44,14 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify({ username, password })
       });
 
+      //Error handling
       if (!res.ok) {
         const err = await res.json();
         return rejectWithValue(err);
       }
 
-      const data = await res.json(); // expect { token }
+      //On success:
+      const data = await res.json(); 
       return { token: data.token };
 
     } catch (err) {
@@ -112,7 +109,7 @@ const authSlice = createSlice({
         const { token } = action.payload;
 
         const decoded = decodeJwt(token);
-        if (!decoded) return; // shouldn't happen but safe
+        if (!decoded) return;
 
         state.token = token;
         state.user = {
@@ -125,7 +122,6 @@ const authSlice = createSlice({
         setApiToken(token);
       })
       .addCase(loginUser.rejected, (state, action) => {
-        // could attach error message to state if needed
       });
   }
 });

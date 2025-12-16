@@ -1,9 +1,8 @@
-// src/App.jsx
 import React, { useEffect } from 'react';
-import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearCredentials, restoreSession } from './store/slices/authSlice';
-import PrivateRoute from './components/PrivateRoute';
+import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom'; 
+import { useSelector, useDispatch } from 'react-redux'; 
+import { clearCredentials, restoreSession } from './store/slices/authSlice'; 
+import PrivateRoute from './components/PrivateRoute'; 
 import Home from './pages/Home';
 import NotesPage from './pages/NotesPage';
 import BookmarksPage from './pages/BookmarksPage';
@@ -14,29 +13,30 @@ import { LogOut } from 'lucide-react';
 
 export default function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location = useLocation(); 
   const { token, user } = useSelector(s => s.auth);
 
-  // Restore session on mount
   useEffect(() => {
     dispatch(restoreSession());
   }, [dispatch]);
 
+  //LOGGING-OUT
   const handleLogout = () => {
     dispatch(clearCredentials());
-    window.location.href = '/login';
+    window.location.href = '/login'; 
   };
 
-  // Only show navbar when user is authenticated (has both token and user)
   const isAuthenticated = !!(token && user);
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
   const showNavbar = isAuthenticated && !isAuthPage;
 
+  //NAVBAR:
   return (
     <div className="min-h-screen bg-gray-50">
-      {showNavbar && (
+      {showNavbar && ( 
         <nav className="bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3">
+            
             {/* Mobile Layout */}
             <div className="md:hidden">
               {/* Top Row: Logo and Logout */}
@@ -102,11 +102,12 @@ export default function App() {
       )}
 
       <main className="p-6">
+        
         <Routes>
-          {/* Default route → Signup (always) */}
+          {/* Default route → redirect to signup*/}
           <Route path="/" element={<Navigate to="/signup" replace />} />
 
-          {/* Public pages - redirect to home if already authenticated */}
+          {/* Public pages */}
           <Route 
             path="/login" 
             element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} 
@@ -116,7 +117,7 @@ export default function App() {
             element={isAuthenticated ? <Navigate to="/home" replace /> : <Signup />} 
           />
 
-          {/* Private pages */}
+          {/* Private pages  => Home, Notes, Bookmarks, Tasks*/}
           <Route
             path="/home"
             element={

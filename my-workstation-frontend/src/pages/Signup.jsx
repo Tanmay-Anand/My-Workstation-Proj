@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import api from '../api/api'; // FIXED: Should be ../api/api not ../services/api
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import api from '../api/api'; 
+import { Link } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom'; 
 
 export default function Signup() {
   const [username,setUsername]=useState('');
@@ -10,11 +10,12 @@ export default function Signup() {
   const [err,setErr]=useState(null);
   const navigate = useNavigate();
 
+  //Form submission handler
   const submit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
-      await api.post('/auth/register', { username, email, password });
-      // optional: auto-login: call login, set token
+      await api.post('/auth/register', { username, email, password }); 
+      //Hits Spring Boot endpoint: POST http://localhost:8080/api/auth/register
       navigate('/login');
     } catch (e) {
       setErr(e.response?.data || e.message);
@@ -22,15 +23,15 @@ export default function Signup() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6">
+    <div className="max-w-md mx-auto p-6"> 
       <h2 className="text-2xl mb-4">Sign Up</h2>
-
+      {/* error */}
       {err && <div className="text-red-600 mb-2">{err}</div>}
 
       <form onSubmit={submit}>
         <input
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={e => setUsername(e.target.value)} 
           placeholder="username"
           className="mb-2 w-full p-2 border rounded"
         />
@@ -48,7 +49,6 @@ export default function Signup() {
           type="password"
           className="mb-2 w-full p-2 border rounded"
         />
-
         <button className="btn w-full mt-2">Sign Up</button>
       </form>
 

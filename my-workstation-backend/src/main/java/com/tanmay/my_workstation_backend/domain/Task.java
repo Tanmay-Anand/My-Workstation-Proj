@@ -19,15 +19,14 @@ import java.time.LocalDate;
                 @Index(name = "idx_task_priority", columnList = "priority"),
                 @Index(name = "idx_task_status", columnList = "status")
         })
+
 public class Task {
 
     public enum Status {
         PENDING,
         DONE
     }
-
     public enum Priority {
-        LOW,
         MEDIUM,
         HIGH
     }
@@ -36,7 +35,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // belongs to a user
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -46,14 +44,12 @@ public class Task {
     private String text;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Status status = Status.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Priority priority = Priority.MEDIUM;
 
-    // Example: 2025-02-10
     @Column(name = "due_date")
     private LocalDate dueDate;
 
@@ -70,7 +66,6 @@ public class Task {
         this.createdAt = now;
         this.updatedAt = now;
     }
-
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = Instant.now();

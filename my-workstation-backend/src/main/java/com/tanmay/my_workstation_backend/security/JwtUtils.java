@@ -17,12 +17,11 @@ public class JwtUtils {
     public JwtUtils(@Value("${jwt.secret}") String secret,
                     @Value("${jwt.expiration-ms}") long expirationMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-//        into a cryptographic key
+
         this.expirationMs = expirationMs;
     }
-//    generateToken() —> When user logs in
     public String generateToken(String username, Long userId) {
-        Date now = new Date();
+        Date now = new Date(); //Get current time
         Date expiry = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
@@ -31,13 +30,9 @@ public class JwtUtils {
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
-//        It signs the token with your secret key using HS256 algorithm
                 .compact();
     }
 
-//    validateToken() — When user makes a request
-//Build a JWT parser, give it the secret key, and then use it to decode + verify this token.
-//If the token is valid, return its contents. If it's fake, expired, or broken, throw an error.
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -46,8 +41,11 @@ public class JwtUtils {
             return false;
         }
     }
-
     public Claims getClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

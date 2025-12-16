@@ -40,10 +40,10 @@ public class Bookmark {
     @Column(columnDefinition = "text")
     private String description;
 
-    // category like: reading, coding, tools
+    // category
     private String category;
 
-    // tags - simple and flexible
+    // tags
     @ElementCollection
     @CollectionTable(name = "bookmark_tags", joinColumns = @JoinColumn(name = "bookmark_id"))
     @Column(name = "tag")

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -37,8 +36,10 @@ public class AuthController {
         this.authManager = authManager;
     }
 
+    //REGISTER ENDPOINT
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
+
         if (userRepo.findByUsername(req.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
@@ -46,18 +47,25 @@ public class AuthController {
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
         user.setPassword(encoder.encode(req.getPassword()));
+
         userRepo.save(user);
+
         return ResponseEntity.ok("User registered");
     }
 
+    //LOGIN ENDPOINT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
         try {
+
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
             );
+
             User user = userRepo.findByUsername(req.getUsername()).get();
+
             String token = jwtUtils.generateToken(user.getUsername(), user.getId());
+
             Map<String, Object> body = new HashMap<>();
             body.put("token", token);
             body.put("expiresIn", jwtUtils.getClaims(token).getExpiration().getTime());

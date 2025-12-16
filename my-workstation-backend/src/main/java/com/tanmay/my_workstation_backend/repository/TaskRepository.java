@@ -15,13 +15,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Page<Task> findByUserId(Long userId, Pageable pageable);
 
-    // Filter by completion
     Page<Task> findByUserIdAndStatus(Long userId, Status status, Pageable pageable);
 
-    // Filter by priority
     Page<Task> findByUserIdAndPriority(Long userId, Priority priority, Pageable pageable);
 
-    // Tasks due today
     @Query("""
         SELECT t FROM Task t
         WHERE t.user.id = :userId
@@ -33,7 +30,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             Pageable pageable
     );
 
-    // Overdue tasks: dueDate < today AND not DONE
     @Query("""
         SELECT t FROM Task t
         WHERE t.user.id = :userId
@@ -46,12 +42,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             Pageable pageable
     );
 
-    // Search inside tasks (text)
     @Query("""
         SELECT t FROM Task t
         WHERE t.user.id = :userId
-        AND LOWER(t.text) LIKE LOWER(CONCAT('%', :q, '%'))
+        AND LOWER(t.text) LIKE LOWER(CONCAT('%', :q, '%')) 
         """)
+
     Page<Task> searchByText(
             @Param("userId") Long userId,
             @Param("q") String q,

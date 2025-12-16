@@ -1,7 +1,5 @@
 package com.tanmay.my_workstation_backend.security;
 
-
-
 import com.tanmay.my_workstation_backend.security.JwtUtils;
 import com.tanmay.my_workstation_backend.security.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
@@ -24,8 +22,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
-//OncePerRequestFilter ensures the filter runs exactly once per request, not multiple times
 
+    //Dependencies
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
 
@@ -39,31 +37,38 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws ServletException, IOException {
 
-        // Skip JWT filter for auth endpoints
+
         String path = req.getRequestURI();
         if (path.startsWith("/api/auth/") || path.equals("/ping")) {
             chain.doFilter(req, res);
             return;
         }
 
+
         String header = req.getHeader("Authorization");
+
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
             try {
+
                 if (jwtUtils.validateToken(token)) {
+
                     Claims claims = jwtUtils.getClaims(token);
                     String username = claims.getSubject();
 
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (JwtException ex) {
-                // token invalid — continue unauthenticated
+
             }
         }
         chain.doFilter(req, res);

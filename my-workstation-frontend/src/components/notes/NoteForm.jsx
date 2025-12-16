@@ -9,17 +9,14 @@ export default function NoteForm() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
-    // convert tags string to set if needed
+    // convert tags string
     if (data.tags && typeof data.tags === 'string') {
       data.tags = data.tags.split(',').map(t => t.trim()).filter(Boolean);
     }
     try {
       await dispatch(createNote(data)).unwrap();
-      // reset or close modal etc
     } catch (err) {
-      // err from createNote rejected payload -- map validation fields
       if (err && typeof err === 'object') {
-        // if backend sends { field: message }
         for (const key of Object.keys(err)) {
           setError(key, { type: 'server', message: err[key] });
         }

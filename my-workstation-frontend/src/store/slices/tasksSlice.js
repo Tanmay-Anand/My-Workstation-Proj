@@ -6,7 +6,7 @@ import * as tasksApi from '../../api/tasksApi';
 export const fetchTasks = createAsyncThunk('tasks/fetch', async (params, { rejectWithValue }) => {
   try {
     const res = await tasksApi.fetchTasks(params);
-    return res.data; // Spring Page object
+    return res.data; 
   } catch (err) {
     return rejectWithValue(err.response?.data || err.message);
   }

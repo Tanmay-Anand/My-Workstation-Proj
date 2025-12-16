@@ -1,4 +1,3 @@
-// src/store/slices/bookmarksSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as bookmarksApi from '../../api/bookmarksApi';
 
@@ -6,7 +5,7 @@ import * as bookmarksApi from '../../api/bookmarksApi';
 export const fetchBookmarks = createAsyncThunk('bookmarks/fetch', async (params, { rejectWithValue }) => {
   try {
     const res = await bookmarksApi.fetchBookmarks(params);
-    return res.data; // Spring Page object
+    return res.data;
   } catch (err) {
     return rejectWithValue(err.response?.data || err.message);
   }

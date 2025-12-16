@@ -12,15 +12,19 @@ public class TaskMapper {
         t.setUser(user);
         t.setText(req.getText());
 
-        if (req.getStatus() != null) t.setStatus(req.getStatus());
-        if (req.getPriority() != null) t.setPriority(req.getPriority());
-        if (req.getDueDate() != null) t.setDueDate(req.getDueDate());
+        if (req.getStatus() != null)
+            t.setStatus(req.getStatus());
+        if (req.getPriority() != null)
+            t.setPriority(req.getPriority());
+        if (req.getDueDate() != null)
+            t.setDueDate(req.getDueDate());
 
         return t;
     }
 
     public static void updateEntity(Task task, TaskRequest req) {
         task.setText(req.getText());
+
         if (req.getStatus() != null) task.setStatus(req.getStatus());
         if (req.getPriority() != null) task.setPriority(req.getPriority());
         if (req.getDueDate() != null) task.setDueDate(req.getDueDate());
@@ -28,6 +32,7 @@ public class TaskMapper {
 
     public static TaskResponse toResponse(Task t) {
         TaskResponse r = new TaskResponse();
+
         r.setId(t.getId());
         r.setText(t.getText());
         r.setStatus(t.getStatus());
@@ -35,6 +40,7 @@ public class TaskMapper {
         r.setDueDate(t.getDueDate());
         r.setCreatedAt(t.getCreatedAt());
         r.setUpdatedAt(t.getUpdatedAt());
+
         return r;
     }
 }

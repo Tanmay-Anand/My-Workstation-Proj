@@ -36,7 +36,6 @@ public class Note {
     @Column(columnDefinition = "text")
     private String content;
 
-    // Phase 3 fields ----------------------
 
     @Column(nullable = false)
     private boolean pinned = false;
@@ -48,8 +47,6 @@ public class Note {
     @CollectionTable(name = "note_tags", joinColumns = @JoinColumn(name = "note_id"))
     @Column(name = "tag")
     private Set<String> tags = new HashSet<>();
-
-    // timestamps --------------------------
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

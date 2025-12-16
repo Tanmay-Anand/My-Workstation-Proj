@@ -25,9 +25,7 @@ public class BookmarkService {
     @Transactional
     public BookmarkResponse createBookmark(BookmarkRequest req) {
         User user = userService.getCurrentUser();
-        // optional uniqueness check
         if (bookmarkRepository.existsByUserIdAndUrl(user.getId(), req.getUrl())) {
-            // either throw custom exception or handle gracefully; here we allow duplicates by default.
         }
         Bookmark b = BookmarkMapper.toEntity(req, user);
         Bookmark saved = bookmarkRepository.save(b);

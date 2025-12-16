@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import api from '../api/api'; // FIXED: Should be ../api/api not ../services/api
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../store/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import api from '../api/api'; 
+import { useDispatch } from 'react-redux'; 
+import { setCredentials } from '../store/slices/authSlice'; 
+import { useNavigate } from 'react-router-dom'; 
+import { Link } from 'react-router-dom'; 
 
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  //Local state for form inputs
+  const [username, setUsername] = useState(''); 
+  const [password, setPassword] = useState(''); 
   const [err, setErr] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //login request
   const submit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
       const res = await api.post('/auth/login', { username, password });
       const token = res.data.token;
-      dispatch(setCredentials({ token }));
-      navigate('/home'); // go inside app
+      dispatch(setCredentials({ token })); 
+      navigate('/home');
     } catch (e) {
-      setErr(e.response?.data || e.message);
+      setErr(e.response?.data || e.message); 
     }
   }
 
@@ -62,7 +65,7 @@ export default function Login() {
 
       <p className="mt-6 text-center text-sm">
         New user?{' '}
-        <Link className="text-blue-600 hover:underline" to="/signup">
+        <Link className="text-blue-600 hover:underline" to="/signup"> 
           Create an account
         </Link>
       </p>

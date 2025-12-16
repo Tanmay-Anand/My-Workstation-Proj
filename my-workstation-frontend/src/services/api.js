@@ -1,4 +1,3 @@
-// src/api/api.js
 import axios from 'axios';
 import { getToken } from './authToken';
 
@@ -7,7 +6,7 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Request interceptor - adds token to every request
+// Request interceptor
 api.interceptors.request.use(
   config => {
     const token = getToken();
@@ -22,7 +21,7 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - handle errors
+// Response interceptor
 api.interceptors.response.use(
   response => response,
   error => {

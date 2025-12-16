@@ -1,4 +1,3 @@
-// src/api/api.js
 import axios from 'axios';
 import { getToken } from './authToken';
 
@@ -7,10 +6,11 @@ const api = axios.create({
   timeout: 10000,
 });
 
+
 api.interceptors.request.use(config => {
-  const token = getToken();
+  const token = getToken(); 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`; 
   }
   return config;
 });

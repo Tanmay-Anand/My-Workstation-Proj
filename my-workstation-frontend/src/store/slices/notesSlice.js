@@ -1,4 +1,3 @@
-// src/store/slices/notesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as notesApi from '../../api/notesApi';
 
@@ -6,7 +5,7 @@ import * as notesApi from '../../api/notesApi';
 export const fetchNotes = createAsyncThunk('notes/fetch', async (params, { rejectWithValue }) => {
   try {
     const res = await notesApi.fetchNotes(params);
-    return res.data; // Spring Page object
+    return res.data; 
   } catch (err) {
     return rejectWithValue(err.response?.data || err.message);
   }
@@ -66,7 +65,6 @@ const notesSlice = createSlice({
 
       .addCase(createNote.pending, (s) => { s.error = null; })
       .addCase(createNote.fulfilled, (s, a) => {
-        // insert created note at top of current list
         s.page.content.unshift(a.payload);
         s.page.totalElements += 1;
       })

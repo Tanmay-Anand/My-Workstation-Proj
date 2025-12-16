@@ -7,9 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 @Service
+
 public class CustomUserDetailsService implements UserDetailsService {
+
     private final UserRepository userRepo;
 
     public CustomUserDetailsService(UserRepository userRepo) {
@@ -22,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
-                .password(user.getPassword()) // hashed
+                .password(user.getPassword())
                 .authorities("USER")
                 .build();
     }

@@ -8,11 +8,11 @@ import './index.css';
 import store from './store/store';
 import { restoreSession } from './store/slices/authSlice';
 
-// Restore session immediately before rendering
 store.dispatch(restoreSession());
 
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+
+  <React.StrictMode> 
     <Provider store={store}>
       <BrowserRouter>
         <App />

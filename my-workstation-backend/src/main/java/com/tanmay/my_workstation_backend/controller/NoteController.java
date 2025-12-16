@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/notes")
 @RequiredArgsConstructor
+
 public class NoteController {
 
     private final NoteService noteService;
@@ -26,6 +27,7 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
+    //List Notes
     @GetMapping
     public ResponseEntity<Page<NoteResponse>> list(
             @RequestParam(value = "q", required = false) String q,
@@ -34,21 +36,25 @@ public class NoteController {
         return ResponseEntity.ok(page);
     }
 
+    //Get a single note
     @GetMapping("/{id}")
     public ResponseEntity<NoteResponse> get(@PathVariable Long id) {
         NoteResponse resp = noteService.getNote(id);
         return ResponseEntity.ok(resp);
     }
 
+    //Update a note
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponse> update(@PathVariable Long id, @Valid @RequestBody NoteRequest req) {
         NoteResponse resp = noteService.updateNote(id, req);
         return ResponseEntity.ok(resp);
     }
 
+    //Delete a note
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         noteService.deleteNote(id);
         return ResponseEntity.noContent().build();
     }
 }
+

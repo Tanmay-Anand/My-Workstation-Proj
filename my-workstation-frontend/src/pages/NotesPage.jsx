@@ -21,6 +21,7 @@ export default function NotesPage() {
     archived: false
   });
 
+  //Fetch notes with debounce
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       dispatch(fetchNotes({ page: pageNo, size: 10, q: searchQuery || null }));
@@ -28,6 +29,7 @@ export default function NotesPage() {
     return () => clearTimeout(delayDebounce);
   }, [dispatch, pageNo, searchQuery]);
 
+  //Create new note
   const handleOpenModal = (note = null) => {
     if (note) {
       setEditingNote(note);
@@ -39,6 +41,7 @@ export default function NotesPage() {
         archived: note.archived
       });
     } else {
+// Edit existing note
       setEditingNote(null);
       setFormData({ title: '', content: '', tags: '', pinned: false, archived: false });
     }
@@ -59,6 +62,7 @@ export default function NotesPage() {
     };
 
     try {
+//If editing:
       if (editingNote) {
         await dispatch(updateNote({ id: editingNote.id, payload })).unwrap();
       } else {
@@ -74,6 +78,7 @@ export default function NotesPage() {
   const handleDelete = async (id) => {
     if (window.confirm('Delete this note?')) {
       try {
+        //Delete handler
         await dispatch(deleteNote(id)).unwrap();
         dispatch(fetchNotes({ page: pageNo, size: 10, q: searchQuery || null }));
       } catch (err) {
@@ -82,6 +87,7 @@ export default function NotesPage() {
     }
   };
 
+//Toggle pin/unpin
   const handleTogglePin = async (note) => {
     const payload = {
       title: note.title,

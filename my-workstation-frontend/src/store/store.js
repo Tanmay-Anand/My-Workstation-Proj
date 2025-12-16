@@ -1,5 +1,5 @@
-// src/store/store.js
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'; 
+
 import authReducer from './slices/authSlice';
 import notesReducer from './slices/notesSlice';
 import bookmarksReducer from './slices/bookmarksSlice';

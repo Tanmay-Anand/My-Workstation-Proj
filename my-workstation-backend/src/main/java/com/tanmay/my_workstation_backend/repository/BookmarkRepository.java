@@ -45,6 +45,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
             Pageable pageable
     );
 
-    // URL uniqueness check within same user
+    // URL uniqueness
     boolean existsByUserIdAndUrl(Long userId, String url);
 }

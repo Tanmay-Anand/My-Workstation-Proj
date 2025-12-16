@@ -46,7 +46,7 @@ public class NoteService {
         Note n = noteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", id));
         if (!n.getUser().getId().equals(userId)) {
-            throw new ResourceNotFoundException("Note", id); // hide presence to other users
+            throw new ResourceNotFoundException("Note", id);
         }
         return NoteMapper.toResponse(n);
     }
@@ -72,6 +72,6 @@ public class NoteService {
         if (!note.getUser().getId().equals(userId)) {
             throw new ResourceNotFoundException("Note", id);
         }
-        noteRepository.delete(note);
+        noteRepository.delete(note); //DELETE FROM notes WHERE id = ?
     }
 }
